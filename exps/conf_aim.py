@@ -3,7 +3,7 @@ W = 1280
 final_dim = (704, 1280)
 
 
-data_root = '/content/drive/MyDrive/aimotive/aimotive_sp'
+data_root = '/kaggle/input/ni1gbe/aimack'
 eval_split = None  # Either None (i.e. use whole dataset) or in ['highway', 'urban', 'rain', 'night']
 experiment_name = 'lidar_radar'
 precision = 32
