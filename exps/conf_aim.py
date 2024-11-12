@@ -115,7 +115,7 @@ bev_neck = dict(type='SECONDFPN',
                 out_channels=[64, 64, 64])
 
 CLASSES = [
-    'car',
+    'bike',
     'truck/bus',
     'motorcycle',
     'pedestrian',
