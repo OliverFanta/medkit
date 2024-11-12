@@ -98,7 +98,7 @@ bda_aug_conf = {
 }
 
 bev_backbone = dict(
-    type='mobilenet',
+    type='Resnet',
     in_channels=fuse_layer_in_channels,
     depth=18,
     num_stages=3,
@@ -115,7 +115,7 @@ bev_neck = dict(type='SECONDFPN',
                 out_channels=[64, 64, 64])
 
 CLASSES = [
-    'bike',
+    'car',
     'truck/bus',
     'motorcycle',
     'pedestrian',
