@@ -98,7 +98,7 @@ bda_aug_conf = {
 }
 
 bev_backbone = dict(
-    type='Resnet',
+    type='ResNet',
     in_channels=fuse_layer_in_channels,
     depth=18,
     num_stages=3,
