@@ -1,9 +1,10 @@
+# Fixed parameters and configuration
 H = 704
 W = 1280
 final_dim = (704, 1280)
 
 data_root = '/kaggle/input/ni1gbe/aimack'
-eval_split = None  # Either None (i.e. use whole dataset) or in ['highway', 'urban', 'rain', 'night']
+eval_split = None  # Either None (use whole dataset) or ['highway', 'urban', 'rain', 'night']
 experiment_name = 'lidar_radar'
 precision = 32
 batch_size = 1
@@ -41,6 +42,7 @@ out_shape = [
     int((point_cloud_range[3] - point_cloud_range[0]) / voxel_size[0]),
 ]
 
+# Backbone configuration
 backbone_conf = {
     'x_bound': [point_cloud_range[0], point_cloud_range[3], voxel_size[0] * out_size_factor],
     'y_bound': [point_cloud_range[1], point_cloud_range[4], voxel_size[1] * out_size_factor],
@@ -87,15 +89,16 @@ bda_aug_conf = {
     'flip_dy_ratio': 0.5,
 }
 
+# Updated MobileNetV2 Backbone
 bev_backbone = dict(
     type='MobileNetV2',
-    in_channels=fuse_layer_in_channels,
     width_mult=1.0,
     out_indices=[1, 2, 3],
     frozen_stages=-1,
     norm_eval=False,
 )
 
+# BEV Neck configuration
 bev_neck = dict(
     type='SECONDFPN',
     in_channels=[32, 96, 320],
@@ -103,6 +106,7 @@ bev_neck = dict(
     out_channels=[64, 64, 64],
 )
 
+# Classes and Tasks
 CLASSES = [
     'car',
     'truck/bus',
@@ -126,6 +130,7 @@ common_heads = dict(
     vel=(2, 2),
 )
 
+# BBox coder
 bbox_coder = dict(
     type='CenterPointBBoxCoder',
     post_center_range=[
@@ -140,6 +145,7 @@ bbox_coder = dict(
     code_size=9,
 )
 
+# Training and testing configurations
 train_cfg = dict(
     point_cloud_range=point_cloud_range,
     grid_size=[out_shape[1], out_shape[0], 1],
@@ -170,6 +176,7 @@ test_cfg = dict(
     nms_thr=0.2,
 )
 
+# BEV Depth Head Configuration
 head_conf = {
     'bev_backbone_conf': bev_backbone,
     'bev_neck_conf': bev_neck,
@@ -178,33 +185,9 @@ head_conf = {
     'bbox_coder': bbox_coder,
     'train_cfg': train_cfg,
     'test_cfg': test_cfg,
-    'in_channels': 192,  # Equal to bev_neck output_channels.
+    'in_channels': 192,  # Matches bev_neck's output channels
     'loss_cls': dict(type='GaussianFocalLoss', reduction='mean'),
     'loss_bbox': dict(type='L1Loss', reduction='mean', loss_weight=0.25),
     'gaussian_overlap': 0.1,
     'min_radius': 2,
 }
-
-lidar_conf = dict(
-    type='MVXFasterRCNN',
-    pts_voxel_layer=dict(
-        point_cloud_range=point_cloud_range,
-        max_num_points=15,
-        voxel_size=voxel_size,
-        max_voxels=(25000, 25000),
-    ),
-    pts_voxel_encoder=dict(
-        type='HardSimpleVFE',
-        num_features=5,
-    ),
-    pts_middle_encoder=dict(
-        type='SparseEncoder',
-        in_channels=5,
-        sparse_shape=[41] + out_shape,
-        output_channels=128,
-        order=('conv', 'norm', 'act'),
-        encoder_channels=((16, 16, 32), (32, 32, 64), (64, 64, 128), (128, 128)),
-        encoder_paddings=((0, 0, 1), (0, 0, 1), (0, 0, [0, 1, 1]), (0, 0)),
-        block_type='basicblock',
-    ),
-)
