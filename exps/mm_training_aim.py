@@ -47,7 +47,6 @@ class BEVDepthLightningModel(LightningModule):
                  use_radar=use_radar,
                  look_back=look_back,
                  look_forward=look_forward,
-                 fuse_layer_in_channels=fuse_layer_in_channels,
                  use_depth_loss=use_depth_loss,
                  **kwargs):
         super().__init__()
