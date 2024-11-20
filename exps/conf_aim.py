@@ -16,6 +16,10 @@ learning_rate = 1e-3 / 64 * batch_size
 voxel_size = [0.2, 0.2, 8]
 out_size_factor = 4
 point_cloud_range = [4 * -51.2, 0.5 * -51.2, -5, 4 * 51.2, 0.5 * 51.2, 3]
+lidar_conf = {
+    "range": [0, 70, -40, 40, -3, 1],  # Example LiDAR range configuration
+    "voxel_size": [0.05, 0.05, 0.1],  # Example voxel size
+}
 
 use_cam = False
 use_lidar = True
